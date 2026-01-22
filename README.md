@@ -1,5 +1,5 @@
 
-# Digital LBP Indicator (STM32F103 + INA226 + ST7735)
+# Digital LBP (PS) Indicator (STM32F103 + INA226 + ST7735)
 
 This project is a high-precision monitoring solution for Laboratory Power Supplies (LBP). The system displays real-time Voltage (V), Current (A), Instantaneous Power (W), and Accumulated Capacity (Ah).
 

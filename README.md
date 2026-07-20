@@ -1,14 +1,28 @@
 
 # Digital LBP (PS) Indicator (STM32F103 + INA226 + ST7735)
 
+> [!NOTE]
+> This repository contains the earlier, measurement-only version of the
+> project. For adjustable current limiting, latched hardware `ALERT`, encoder
+> control, buzzer signalling, ready-to-flash firmware, and expanded
+> documentation, see the active
+> [Laboratory PSU Meter and Protection](https://github.com/Aleksei327/STM32F103-INA226-ST7735-Indicator-Encoder-Protection-PS)
+> project.
+
 This project is a high-precision monitoring solution for Laboratory Power Supplies (LBP). The system displays real-time Voltage (V), Current (A), Instantaneous Power (W), and Accumulated Capacity (Ah).
 
-## Key Feature: 100% Compatibility with "Chinese Clones"
+## Key Feature: Software-I2C Hardware Workaround
 
-This project was specifically designed for engineers who encounter issues with counterfeit or low-quality **STM32F103 (Blue Pill)** chips from AliExpress.
+This project was developed on a Blue Pill board whose hardware I2C peripheral
+was unstable with the INA226.
 
-**The Problem:** In these clone chips, the hardware I2C peripheral is often unstable: the bus frequently hangs in a `BUSY` state, or the device fails to be detected entirely (`DEAD` status).
-**The Solution:** This project utilizes **Software I2C (bit-banging)**. This approach guarantees 100% stable communication with the INA226 sensor regardless of the MCU's silicon quality, as we control the pins directly.
+**The observed problem:** On the author's hardware, the I2C bus could hang in
+a `BUSY` state or the INA226 could fail to be detected (`DEAD` status).
+
+**The implemented workaround:** The firmware uses **software I2C
+(bit-banging)** so the pins are controlled directly. This workaround was
+stable on the assembled prototype. It is not a universal guarantee for every
+third-party STM32F103-compatible board or INA226 module.
 
 ---
 
@@ -36,7 +50,10 @@ This project was specifically designed for engineers who encounter issues with c
 
 ## Setup and Calibration
 
-The project achieves very high accuracy (error margin as low as **0.6 mA**), but requires fine-tuning for your specific components:
+On the author's calibrated prototype, the observed current-reading difference
+was as low as approximately **0.6 mA** at tested operating points. This is a
+prototype observation, not a guaranteed specification, and each build requires
+calibration for its shunt and component tolerances:
 
 1. **Shunt Configuration:** In the `Core/Inc/INA226.h` file, find the line `#define INA226_SHUNT_OHMS`. Enter the exact resistance of your shunt (e.g., `0.033f` for an R033 resistor).
 2. **Measurement Correction:** Data processing logic is located in `Core/Src/main.c`.
@@ -85,3 +102,10 @@ If using a standard Chinese **ST-Link V2**:
 
 ## About the Author
 
+Aleksei Subbotin is an embedded-electronics developer based in France, working
+with STM32/AVR firmware, measurement and protection systems, power-control
+prototypes, and PCB design.
+
+- [Current Laboratory PSU Meter and Protection project](https://github.com/Aleksei327/STM32F103-INA226-ST7735-Indicator-Encoder-Protection-PS)
+- [GitHub portfolio](https://github.com/Aleksei327)
+- [Contact](mailto:alsubfr@hotmail.com)
